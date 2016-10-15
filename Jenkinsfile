@@ -34,7 +34,7 @@ node ('swarm') {
     
     stage "Configure Service updates for end users - External ports, volumes/networks, access control"
     dir("${env.DEVPROJCOMPOSEDIR}") {
-        sh "docker service  update --publish-add 7979:5000 ${env.JOB_NAME}_apigateway"
+        sh "polyglot-deploy.sh"
     }
     
     stage "Publish Swarm Node and Service details"
