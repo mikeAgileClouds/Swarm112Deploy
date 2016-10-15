@@ -24,17 +24,17 @@ node ('swarm') {
     
     stage "Create Application Bundle"
     dir("${env.DEVPROJCOMPOSEDIR}") {
-        sh "docker-compose bundle -o polyglot.dab"
+        sh "docker-compose bundle -o ${env.JOB_NAME}.dab"
     }
 
     stage "Deploy Docker App Bundle"
     dir("${env.DEVPROJCOMPOSEDIR}") {
-        sh "docker stack deploy polyglot" // deploy create as well as update stack - ?Does note seem to be working?
+        sh "docker stack deploy ${env.JOB_NAME}" // deploy create as well as update stack - ?Does note seem to be working?
     }
     
     stage "Configure Service updates for end users - External ports, volumes/networks, access control"
     dir("${env.DEVPROJCOMPOSEDIR}") {
-        sh "docker service  update --publish-add 7979:5000 polyglot_apigateway"
+        sh "docker service  update --publish-add 7979:5000 ${env.JOB_NAME}_apigateway"
     }
     
     stage "Publish Swarm Node and Service details"
