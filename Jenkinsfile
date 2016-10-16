@@ -34,7 +34,7 @@ node ('swarm') {
     
     stage "Configure Service updates for end users - External ports, volumes/networks, access control"
     dir("${env.DEVPROJCOMPOSEDIR}") {
-        sh "polyglot-deploy.sh"
+        sh "polyglot-deploy.sh ${env.JOB_NAME}"
     }
     
     stage "Publish Swarm Node and Service details"
