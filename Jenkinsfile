@@ -30,13 +30,13 @@ node ('swarm') {
     stage "Upload Application Bundle"
     dir("${env.DEVPROJCOMPOSEDIR}") {
         echo 'Place holder for DAB file push'
-        #sh "curl -u admin:73admin79 -X PUT http://169.55.59.106:8080/artifactory/ext-release-local/${env.JOB_NAME}.dab -T ${env.JOB_NAME}.dab"
+        // sh "curl -u admin:73admin79 -X PUT http://169.55.59.106:8080/artifactory/ext-release-local/${env.JOB_NAME}.dab -T ${env.JOB_NAME}.dab"
     }
     
     stage "Download Application Bundle"
     dir("${env.DEVPROJCOMPOSEDIR}") {
         echo 'Place holder for DAB file push'
-        #sh "curl -u admin:73admin79 -X PUT http://169.55.59.106:8080/artifactory/ext-release-local/${env.JOB_NAME}.dab -o ${env.JOB_NAME}.dab"
+        // sh "curl -u admin:73admin79 -X PUT http://169.55.59.106:8080/artifactory/ext-release-local/${env.JOB_NAME}.dab -o ${env.JOB_NAME}.dab"
     }
 
     stage "Deploy Docker App Bundle"
