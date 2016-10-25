@@ -10,7 +10,7 @@ node ('swarm') {
         sh "git submodule update --force"
     }
     
-    state "Clear running services"
+    stage "Clear running services"
     // NOTE: this is a temporary workaround for port clashing 
     sh "docker service  ls -q | xargs docker service rm"
     
