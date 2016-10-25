@@ -10,7 +10,7 @@ node ('swarm') {
         sh "git submodule update --force"
     }
     
-    stage "Build Docker Images"
+    stage "Build Application Images"
     dir("${env.DEVPROJCOMPOSEDIR}") {
         sh "docker-compose build" // build --pull is failing on some nodes
     }
@@ -24,34 +24,38 @@ node ('swarm') {
     
     stage "Create Application Bundle"
     dir("${env.DEVPROJCOMPOSEDIR}") {
-        sh "docker-compose bundle -o ${env.JOB_NAME}.dab"
+        sh "docker-compose bundle -o ${env.JOB_NAME}_app.dab"
     }
+    
+    stage "Build Infrasture Images"
+    sh "docker-compose build" // build --pull is failing on some nodes
+    
+    stage "Upload Infra Images from register"
+    sh "docker login -u ${env.DOCKER_HUB_USER} -p ${env.DOCKER_HUB_PASSWORD}"
+    sh "docker-compose push"
+    sh "docker-compose pull"
+    
+    stage "Create Infrastructure Bundle"
+    sh "docker-compose bundle -o ${env.JOB_NAME}_infra.dab"
+    
+    stage "Merge Infrastructure and Application Bundle"
+    sh "docker run --user $(id -u) -v `pwd`:/data mikeagileclouds/dabmerger -o ${env.JOB_NAME}.dab ${env.JOB_NAME}_infra.dab ${env.DEVPROJCOMPOSEDIR}/${env.JOB_NAME}_app.dab"
     
     stage "Upload Application Bundle"
-    dir("${env.DEVPROJCOMPOSEDIR}") {
-        echo 'Place holder for DAB file push'
-        // sh "curl -u admin:73admin79 -X PUT http://169.55.59.106:8080/artifactory/ext-release-local/${env.JOB_NAME}.dab -T ${env.JOB_NAME}.dab"
-    }
+    echo 'Place holder for DAB file push'
+   // sh "curl -u admin:73admin79 -X PUT http://169.55.59.106:8080/artifactory/ext-release-local/${env.JOB_NAME}.dab -T ${env.JOB_NAME}.dab"
     
     stage "Download Application Bundle"
-    dir("${env.DEVPROJCOMPOSEDIR}") {
-        echo 'Place holder for DAB file push'
-        // sh "curl -u admin:73admin79 -X PUT http://169.55.59.106:8080/artifactory/ext-release-local/${env.JOB_NAME}.dab -o ${env.JOB_NAME}.dab"
-    }
-
+    echo 'Place holder for DAB file push'
+    // sh "curl -u admin:73admin79 -X PUT http://169.55.59.106:8080/artifactory/ext-release-local/${env.JOB_NAME}.dab -o ${env.JOB_NAME}.dab"
+    
     stage "Deploy Docker App Bundle"
-    dir("${env.DEVPROJCOMPOSEDIR}") {
-        sh "docker stack deploy ${env.JOB_NAME}" // deploy create as well as update stack - ?Does note seem to be working?
-    }
+    sh "docker stack deploy ${env.JOB_NAME}" // deploy create as well as update stack - ?Does note seem to be working?
     
     stage "Configure Service updates for end users - External ports, volumes/networks, access control"
-    // dir("${env.DEVPROJCOMPOSEDIR}") {
-        sh "sh scripts/polyglot-deploy.sh ${env.JOB_NAME}"
-    // }
-    
+    sh "sh scripts/polyglot-deploy.sh ${env.JOB_NAME}"
+        
     stage "Publish Swarm Node and Service details"
-    dir("${env.DEVPROJCOMPOSEDIR}") {
-        sh "docker node ls"
-        sh "docker service ls"
-    }
+    sh "docker node ls"
+    sh "docker service ls"
 }
