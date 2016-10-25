@@ -5,5 +5,6 @@ then
   echo "Usage: $0 <project name>"
   exit 1
 fi
+docker service  update --publish-add 7878:5000 ${1}_apigateway
 
-docker service  update --publish-add 7979:5000 ${1}_apigateway
+# Running -  docker service  update --publish-add 7979:5000 ${1}_apigate
