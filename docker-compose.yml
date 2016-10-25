@@ -2,7 +2,7 @@ version: "2"
 
 services:
     apigateway:
-        image: jcdemo/apigateway
+        image: ${DOCKER_HUB_USER}/apigateway
         build: apigateway
         environment:
             - APP_URL=http://railsapp:3000
