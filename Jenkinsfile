@@ -39,7 +39,7 @@ node ('swarm') {
     sh "docker-compose bundle -o ${env.JOB_NAME}_infra.dab"
     
     stage "Merge Infrastructure and Application Bundle"
-    sh "docker run --rm -v `pwd`:/data mikeagileclouds/dabmerger -o ${env.JOB_NAME}.dab ${env.JOB_NAME}_infra.dab ${env.DEVPROJCOMPOSEDIR}/${env.JOB_NAME}_app.dab"
+    sh "docker run --rm -v `pwd`:/data mikeagileclouds/dabmerger --out ${env.JOB_NAME}.dab ${env.JOB_NAME}_infra.dab ${env.DEVPROJCOMPOSEDIR}/${env.JOB_NAME}_app.dab"
     
     stage "Upload Application Bundle"
     echo 'Place holder for DAB file push'
