@@ -10,6 +10,10 @@ node ('swarm') {
         sh "git submodule update --force"
     }
     
+    state "Clear running services"
+    // NOTE: this is a temporary workaround for port clashing 
+    sh "docker service  ls -q | xargs docker service rm"
+    
     stage "Build Application Images"
     dir("${env.DEVPROJCOMPOSEDIR}") {
         sh "docker-compose build" // build --pull is failing on some nodes
