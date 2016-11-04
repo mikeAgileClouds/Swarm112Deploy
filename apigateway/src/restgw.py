@@ -9,8 +9,28 @@ import os
 app = Flask(__name__)
 
 @app.route("/")
-def get_tasks():
-    response = requests.get(os.environ['APP_URL'] + '/json')
+def get_root_info():
+    return jsonify ( { 'TODO': "give more details about apis" } ) 
+
+@app.route("/railsapp/")
+def call_railsapp():
+    response = requests.get(os.environ['RAILSAPP_URL'] + '/json')
+    if response.status_code == 200 :
+        return jsonify(response.json())
+
+    return jsonify ( { 'ResponseStatusCode': response.status_code } ) 
+
+@app.route("/flaskapp/")
+def call_railsapp():
+    response = requests.get(os.environ['FLASKAPP_URL'] + '/json')
+    if response.status_code == 200 :
+        return jsonify(response.json())
+
+    return jsonify ( { 'ResponseStatusCode': response.status_code } ) 
+
+@app.route("/pythonapp/")
+def call_railsapp():
+    response = requests.get(os.environ['PYTHONAPP_URL'] + '/json')
     if response.status_code == 200 :
         return jsonify(response.json())
 
