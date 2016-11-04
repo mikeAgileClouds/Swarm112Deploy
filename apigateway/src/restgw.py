@@ -21,7 +21,7 @@ def call_railsapp():
     return jsonify ( { 'ResponseStatusCode': response.status_code } ) 
 
 @app.route("/flaskapp/")
-def call_railsapp():
+def call_flaskapp():
     response = requests.get(os.environ['FLASKAPP_URL'] + '/json')
     if response.status_code == 200 :
         return jsonify(response.json())
@@ -29,7 +29,7 @@ def call_railsapp():
     return jsonify ( { 'ResponseStatusCode': response.status_code } ) 
 
 @app.route("/pythonapp/")
-def call_railsapp():
+def call_pythonapp():
     response = requests.get(os.environ['PYTHONAPP_URL'] + '/json')
     if response.status_code == 200 :
         return jsonify(response.json())
